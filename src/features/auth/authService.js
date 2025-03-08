@@ -4,7 +4,7 @@ const API_URL = "/api/user"; // Base API URL
 
 const login = async (formData) => {
   try {
-    const res = await axios.post(`${API_URL}/login`, formData);
+    const res = await axios.post(`https://carrepairbackend.onrender.com/api/user/login`, formData);
     localStorage.setItem("user", JSON.stringify(res.data));
     return res.data;
   } catch (error) {
@@ -15,7 +15,7 @@ const login = async (formData) => {
 
 const register = async (formData) => {
   try {
-    const res = await axios.post(API_URL, formData);
+    const res = await axios.post('https://carrepairbackend.onrender.com/api/user', formData);
     localStorage.setItem("user", JSON.stringify(res.data));
     return res.data;
   } catch (error) {
