@@ -1,52 +1,65 @@
-import {Button,Card,CardContent,Container,TextField,Typography,} from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  Container,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { registerUser } from "../features/auth/authSlice";
 import Loading from "../components/Loading";
 
 const Register = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const { user, isLoading } = useSelector((state) => state.auth);
 
-  const dispatch = useDispatch()
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    password2: "",
+  });
 
-  const navigate = useNavigate()
+  const { name, email, password, password2 } = formData;
 
-  const {user,isLoading} = useSelector((state)=>state.auth)
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
- const [formData,setFormData] = useState({
-  name : " ",
-   email : " ",
-   password : " ",
-   password2 : ''
- })
+  const handleRegister = (e) => {
+    e.preventDefault();
 
- const {name,email,password,password2} = formData;
+    // Validation checks
+    if (!name.trim() || !email.trim() || !password.trim() || !password2.trim()) {
+      alert("All fields are required!");
+      return;
+    }
 
+    if (password !== password2) {
+      alert("Passwords do not match!");
+      return;
+    }
 
- const handleChance = (e) => {
-   setFormData(
-     {
-       ...formData,
-     [e.target.name] : e.target.value
-   }
-   )
- }
+    dispatch(registerUser(formData));
+  };
 
-  useEffect(()=>{
-  if(user){
-    navigate("/")
+  if (isLoading) {
+    return <Loading />;
   }
-  if(isLoading){
-   return(<Loading/>)
-  }
- },[user])
- const handleRegister = (e) => {
-   e.preventDefault()
-   dispatch(registerUser(formData))
- }
-
 
   return (
     <Container sx={{ padding: "80px 0px" }}>
@@ -61,7 +74,7 @@ const Register = () => {
               variant="outlined"
               label="Enter Name"
               type="text"
-              onChange={handleChance}
+              onChange={handleChange}
               fullWidth
               name="name"
               value={name}
@@ -72,7 +85,7 @@ const Register = () => {
               label="Enter Email"
               type="email"
               fullWidth
-              onChange={handleChance}
+              onChange={handleChange}
               name="email"
               value={email}
             />
@@ -82,7 +95,7 @@ const Register = () => {
               label="Enter Password"
               type="password"
               fullWidth
-              onChange={handleChance}
+              onChange={handleChange}
               name="password"
               value={password}
             />
@@ -91,7 +104,7 @@ const Register = () => {
               variant="outlined"
               label="Confirm Password"
               type="password"
-              onChange={handleChance}
+              onChange={handleChange}
               fullWidth
               name="password2"
               value={password2}
