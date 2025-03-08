@@ -20,10 +20,10 @@ const Home = () => {
   useEffect(() => {
     dispatch(getTrendingCoins());
 
-    if(!user){
-      navigate("/login")
-     }
-  }, [user]);
+    // if(!user){
+    //   navigate("/login")
+    //  }
+  }, []);
   return (
     <>
      <Allcoins/>
